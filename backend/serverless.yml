@@ -1,0 +1,74 @@
+service: aws-lambda-app
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+    NODE_ENV: ${self:provider.stage}
+    FRONTEND_URL: ${env:FRONTEND_URL, 'http://localhost:3000'}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "arn:aws:logs:*:*:*"
+        - Effect: Allow
+          Action:
+            - ec2:CreateNetworkInterface
+            - ec2:DescribeNetworkInterfaces
+            - ec2:DeleteNetworkInterface
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - secretsmanager:GetSecretValue
+          Resource: "*"
+
+functions:
+  api:
+    handler: dist/main.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - X-Requested-With
+            allowCredentials: true
+    timeout: 30
+    memorySize: 1024
+    reservedConcurrency: 100
+    environment:
+      MONGODB_URI: ${env:MONGODB_URI}
+      NODE_ENV: ${self:provider.stage}
+      FRONTEND_URL: ${env:FRONTEND_URL, 'http://localhost:3000'}
+    tags:
+      Environment: ${self:provider.stage}
+      Service: ${self:service}
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3001
+    noPrependStageInUrl: true
+    lambdaPort: 3002
+    useChildProcesses: true
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: true
+    packager: 'npm'

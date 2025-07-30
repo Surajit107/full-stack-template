@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/*": ["src/*"],
+      "@common/*": ["src/common/*"],
+      "@common": ["src/common"],
+      "@modules/*": ["src/modules/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@interfaces/*": ["src/common/interfaces/*"],
+      "@abstract/*": ["src/common/abstract/*"],
+      "@exceptions/*": ["src/common/exceptions/*"],
+      "@utils/*": ["src/common/utils/*"],
+      "@constants/*": ["src/common/constants/*"],
+      "@entities/*": ["src/modules/entities/*"],
+      "@dto/*": ["src/modules/dto/*"],
+      "@repositories/*": ["src/modules/repositories/*"],
+      "@services/*": ["src/modules/services/*"],
+      "@resolvers/*": ["src/modules/resolvers/*"],
+      "@graphql/*": ["src/graphql/*"],
+      "@graphql": ["src/graphql"],
+      "@decorators/*": ["src/common/decorators/*"],
+      "@guards/*": ["src/common/guards/*"]
+    }
+  }
+}
